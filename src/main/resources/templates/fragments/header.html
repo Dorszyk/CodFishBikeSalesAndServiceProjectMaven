@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+<header th:fragment="template" class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/codfish-bike">
+            <img th:src="@{/images/bike.png}" alt="" width="30" height="24" class="d-inline-block align-top">
+            Codfish Bikes
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/salesman">Salesman-Portal</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/purchase">Salesman-Sale</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/add_update_salesman">Salesmen-Management</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/service/new">Bike-Service</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/bike/history">Bike-History</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/personRepairing">Person Repairing-Portal</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/add_update_person_repairing">Person Repairing-Management</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/customers-purchases">Customers</a></li>
+                <li class="nav-item"><a class="nav-link" href="/codfish-bike/invoices-purchases">Invoices</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+</body>
+</html>

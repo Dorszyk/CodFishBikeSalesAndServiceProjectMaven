@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace='~{/fragments/head.html :: template}'></div>
+
+<div th:replace='~{/fragments/header.html :: template}'></div>
+
+<body class="bg-light">
+<br>
+<br>
+<br>
+<div class="header">
+    <img th:src="@{/images/bike.png}" alt="CodFish Logo" class="logo">
+    <h1 class="centered-title">Salesman - Bicycle Sale</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="button-row">
+                <a th:href="@{/purchase}" class="btn btn-success" role="button"><i class="fas fa-bicycle"></i> Sale </a>
+                <a th:href="@{/service/new}" class="btn btn-success" role="button"><i class="fas fa-tools"></i> Service
+                    a bike</a>
+                <a th:href="@{/bike/history}" class="btn btn-success" role="button"><i class="fas fa-history"></i> Bike
+                    history</a>
+                <a th:href="@{/}" class="btn btn-secondary" role="button"><i class="fas fa-arrow-left"></i>Go back</a>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Add a bike</h4>
+            <form action="#" th:action="@{/add_bike}" th:object="${availableBikeDTOs}" method="POST">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category"
+                           th:value="${bikeToBuyDTO.category}" required>
+                </div>
+                <div class="form-group">
+                    <label for="subcategory">Subcategory</label>
+                    <input type="text" class="form-control" id="subcategory" name="subcategory"
+                           th:value="${bikeToBuyDTO.subcategory}" required>
+                </div>
+                <div class="form-group">
+                    <label for="serial">Serial</label>
+                    <input type="text" class="form-control" id="serial" name="serial" th:value="${bikeToBuyDTO.serial}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+                    <input type="text" class="form-control" id="brand" name="brand" th:value="${bikeToBuyDTO.brand}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" class="form-control" id="model" name="model" th:value="${bikeToBuyDTO.model}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" class="form-control" id="year" name="year" th:value="${bikeToBuyDTO.year}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    <input type="text" class="form-control" id="color" name="color" th:value="${bikeToBuyDTO.color}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" class="form-control" id="price" name="price" th:value="${bikeToBuyDTO.price}"
+                           required>
+                </div>
+                <br>
+                <button type=" submit" class="btn btn-primary">Add Bike</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h4>Update a bike</h4>
+            <form action="#" th:action="@{/update_bike}" th:object="${availableBikeDTOs}" method="PUT">
+                <div class="form-group">
+                    <label for="serial">Enter Serial Number of Bike to Update</label>
+                    <input type="text" class="form-control" id="serial" name="serial" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category" required>
+                </div>
+                <div class="form-group">
+                    <label for="subcategory">Subcategory</label>
+                    <input type="text" class="form-control" id="subcategory" name="subcategory" required>
+                </div>
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+                    <input type="text" class="form-control" id="brand" name="brand" required>
+                </div>
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" class="form-control" id="model" name="model" required>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" class="form-control" id="year" name="year" required>
+                </div>
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    <input type="text" class="form-control" id="color" name="color" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" class="form-control" id="price" name="price" required>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-warning">Update Bike</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <br>
+    <div>
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for bikes...">
+        <h4><p>Available bikes:</p></h4>
+        <table class="table" id="bikes-table">
+            <thead class="table-dark">
+            <tr>
+                <th>Id:</th>
+                <th>Category:</th>
+                <th>Subcategory:</th>
+                <th>Serial:</th>
+                <th>Brand:</th>
+                <th>Model:</th>
+                <th>Year:</th>
+                <th>Color:</th>
+                <th>Price PLN:</th>
+                <th>Actions:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bike, stat : ${availableBikeDTOs}">
+                <td th:text="${stat.count}"></td>
+                <td th:text="${bike.category}"></td>
+                <td th:text="${bike.subcategory}"></td>
+                <td th:text="${bike.serial}"></td>
+                <td th:text="${bike.brand}"></td>
+                <td th:text="${bike.model}"></td>
+                <td th:text="${bike.year}"></td>
+                <td th:text="${bike.color}"></td>
+                <td th:text="${bike.price}"></td>
+                <td>
+                    <form th:action="@{/deleteBike/{serial}(serial=${bike.serial})}" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="pagination-container"></div>
+    </div>
+    <br>
+    <h4><p>Available salesmen:</p></h4>
+    <div>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>Salesman id:</th>
+                <th>Name:</th>
+                <th>Surname:</th>
+                <th>Code NameSurname:</th>
+                <th>User id:</th>
+                <th>Actions:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="salesman : ${availableSalesmenDTOs}">
+                <td th:text="${salesman.salesmanId}"></td>
+                <td th:text="${salesman.name}"></td>
+                <td th:text="${salesman.surname}"></td>
+                <td th:text="${salesman.codeNameSurname}"></td>
+                <td th:text="${salesman.userId}"></td>
+                <td>
+                    <form>
+                        <a th:href="@{/add_update_salesman}" class="btn btn-info" role="button">Edit</a>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <h4><p>Available person repairing:</p></h4>
+    <div>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>Person Repairing:</th>
+                <th>Name:</th>
+                <th>Surname:</th>
+                <th>Code NameSurname:</th>
+                <th>User id:</th>
+                <th>Actions:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="personRepairing : ${availablePersonRepairingDTOs}">
+                <td th:text="${personRepairing.personRepairingId}"></td>
+                <td th:text="${personRepairing.name}"></td>
+                <td th:text="${personRepairing.surname}"></td>
+                <td th:text="${personRepairing.codeNameSurname}"></td>
+                <td th:text="${personRepairing.userId}"></td>
+                <td>
+                    <form>
+                        <a th:href="@{/add_update_person_repairing}" class="btn btn-info" role="button">Edit</a>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var items = $("#bikes-table tr");
+        var numItems = items.length;
+        var perPage = 10;
+
+        items.slice(perPage).hide();
+
+        $('#pagination-container').twbsPagination({
+            totalPages: Math.ceil(numItems / perPage),
+            visiblePages: 5,
+            onPageClick: function (event, page) {
+                var start = perPage * (page - 1);
+                var end = start + perPage;
+
+                items.hide().slice(start, end).show();
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#bikes-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<div th:replace='~{/fragments/footer.html :: template}'></div>
+</body>
+</html>

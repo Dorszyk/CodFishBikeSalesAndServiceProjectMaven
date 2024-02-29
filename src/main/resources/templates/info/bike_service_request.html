@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace='~{/fragments/head.html :: template}'></div>
+
+<div th:replace='~{/fragments/header.html :: template}'></div>
+
+<body class="bg-light">
+<br><br><br>
+<div class="header">
+    <div class="header text-center mb-4">
+        <img th:src="@{/images/bike.png}" alt="CodFish Logo" class="logo">
+        <h1 class="centered-title">Salesman - Service a Bike</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="col-12 mb-3">
+        <div class="button-row">
+            <a th:href="@{/service/new-customer}" class="btn btn-info">New Customer Service</a>
+            <a th:href="@{/salesman}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Go back
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-8 mx-auto">
+        <form action="#" th:action="@{/service/request}" th:object="${bikeServiceRequestDTO}" method="POST">
+            <h3>Existing customer:</h3>
+            <div class="mb-3">
+                <label for="existingCustomerEmail" class="form-label">Customer email:</label>
+                <input type="text" id="existingCustomerEmail" th:field="*{existingCustomerEmail}"
+                       class="form-control" aria-label="Customer Email">
+            </div>
+            <div class="mb-3">
+                <label for="existingBikeSerial" class="form-label">Bike Serial:</label>
+                <input type="text" id="existingBikeSerial" th:field="*{existingBikeSerial}" class="form-control"
+                       aria-label="Bike Serial">
+            </div>
+            <div class="mb-3">
+                <label for="customerComment" class="form-label">Service comment:</label>
+                <textarea id="customerComment" th:field="*{customerComment}" rows="4" class="form-control"
+                          aria-label="Service Comment" required></textarea>
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Request" class="btn btn-success">
+            </div>
+        </form>
+        <br>
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search customer or bike...">
+        <form action="#" th:action="@{/invoices-purchases}" method="POST" th:object="${InvoiceDTO}">
+            <table class="table" id="service-table">
+                <thead class="table-dark">
+                <h4> Invoices customers :</h4>
+                <tr>
+                    <th class="col-0">Number:</th>
+                    <th class="col-0">Bike:</th>
+                    <th class="col-0">Customer's name:</th>
+                    <th class="col-0">Customer's surname:</th>
+                    <th class="col-0">Customer's email:</th>
+                    <th class="col-0">Customer's phone:</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="invoice,stat : ${availableInvoicesDTOs}">
+                    <td th:text="${stat.count}"></td>
+                    <td th:text="${invoice.bike.serial}"></td>
+                    <td th:text="${invoice.customer.name}"></td>
+                    <td th:text="${invoice.customer.surname}"></td>
+                    <td th:text="${invoice.customer.email}"></td>
+                    <td th:text="${invoice.customer.phone}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="pagination-container"></div>
+        </form>
+    </div>
+</div>
+</div>
+
+<footer th:replace='~{/fragments/footer.html :: template}'>
+</footer>
+<script>
+    $(document).ready(function () {
+        var items = $("#service-table tr");
+        var numItems = items.length;
+        var perPage = 10;
+
+        items.slice(perPage).hide();
+
+        $('#pagination-container').twbsPagination({
+            totalPages: Math.ceil(numItems / perPage),
+            visiblePages: 5,
+            onPageClick: function (event, page) {
+                var start = perPage * (page - 1);
+                var end = start + perPage;
+
+                items.hide().slice(start, end).show();
+            }
+        });
+    });
+</script>
+<script>
+
+    $(document).ready(function () {
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#service-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+</body>
+</html>
+

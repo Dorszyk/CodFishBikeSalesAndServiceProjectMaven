@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace='~{/fragments/head.html :: template}'></div>
+
+<div th:replace='~{/fragments/header.html :: template}'></div>
+
+<body class="bg-light">
+<br><br><br>
+<div class="header">
+    <img th:src="@{/images/bike.png}" alt="CodFish Logo" class="logo">
+    <h1 class="centered-title">Bike Purchase - Invoices</h1>
+</div>
+
+<div class="container">
+    <div class="col-12">
+        <div class="button-row">
+            <a th:href="@{/}" class="btn btn-secondary" role="button"><i class="fas fa-arrow-left"></i> Go back to home</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="container">
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search invoice...">
+        <form action="#" th:action="@{/invoices-purchases}" method="POST" th:object="${InvoiceDTO}">
+            <table class="table" id="invoice-table">
+                <thead class="table-dark">
+                <tr>
+                    <th class="col-0">Id:</th>
+                    <th class="col-0">Invoice Number:</th>
+                    <th class="col-0">Date time:</th>
+                    <th class="col-0">Serial Bike:</th>
+                    <th class="col-0">Customer's name:</th>
+                    <th class="col-0">Customer's surname:</th>
+                    <th class="col-0">Customer's email:</th>
+                    <th class="col-0">Salesman:</th>
+                    <th class="col-0">Total price PLN:</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="invoice : ${availableInvoicesDTOs}">
+
+                    <td th:text="${invoice.invoiceId}"></td>
+                    <td th:text="${invoice.invoiceNumber}"></td>
+                    <td th:text="${invoice.dateTime}"></td>
+                    <td th:text="${invoice.bike.serial}"></td>
+                    <td th:text="${invoice.customer.name}"></td>
+                    <td th:text="${invoice.customer.surname}"></td>
+                    <td th:text="${invoice.customer.email}"></td>
+                    <td th:text="${invoice.salesman}"></td>
+                    <td th:text="${invoice.bike.price}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+            <div id="pagination-container"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var items = $("#invoice-table tr");
+        var numItems = items.length;
+        var perPage = 10;
+
+        items.slice(perPage).hide();
+
+        $('#pagination-container').twbsPagination({
+            totalPages: Math.ceil(numItems / perPage),
+            visiblePages: 5,
+            onPageClick: function (event, page) {
+                var start = perPage * (page - 1);
+                var end = start + perPage;
+
+                items.hide().slice(start, end).show();
+            }
+        });
+    });
+</script>
+<script>
+
+    $(document).ready(function () {
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#invoice-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+</body>
+<br><br><br>
+<div th:replace='~{/fragments/footer.html :: template}'></div>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace='~{/fragments/head.html :: template}'></div>
+
+<div th:replace='~{/fragments/header.html :: template}'></div>
+
+<body class="bg-light">
+<br><br><br>
+<div class="header">
+    <img th:src="@{/images/bike.png}" alt="CodFish Logo" class="logo">
+    <h1 class="centered-title">Salesman - Retail Sale</h1>
+</div>
+<div class="container">
+    <div class="col-12">
+        <div class="button-row">
+            <a th:href="@{/purchase-new-customer}" class="btn btn-info" role="button">New customer order</a>
+            <a th:href="@{/customers-purchases}" class="btn btn-info" role="button">Customers</a>
+            <a th:href="@{/salesman}" class="btn btn-secondary" role="button"><i class="fas fa-arrow-left"></i>Go back</a>
+        </div>
+    </div>
+    <br>
+    <div>
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for bikes...">
+        <h4><p>Available bikes:</p></h4>
+        <table class="table" id="bikes-table">
+            <thead class="table-dark">
+            <tr>
+                <th>Id:</th>
+                <th>Category:</th>
+                <th>Subcategory:</th>
+                <th>Serial:</th>
+                <th>Brand:</th>
+                <th>Model:</th>
+                <th>Year:</th>
+                <th>Color:</th>
+                <th>Price PLN:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bike, stat : ${availableBikeDTOs}">
+                <td th:text="${stat.count}"></td>
+                <td th:text="${bike.category}"></td>
+                <td th:text="${bike.subcategory}"></td>
+                <td th:text="${bike.serial}"></td>
+                <td th:text="${bike.brand}"></td>
+                <td th:text="${bike.model}"></td>
+                <td th:text="${bike.year}"></td>
+                <td th:text="${bike.color}"></td>
+                <td th:text="${bike.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="pagination-container"></div>
+    </div>
+</div>
+<div class="container">
+    <form action="#" th:action="@{/purchase}" method="POST" th:object="${bikePurchaseDTO}">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Existing customer:</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" id="existingCustomerEmail"
+                           th:field="*{existingCustomerEmail}" required class="form-control "
+                           placeholder="Enter the e-mail address of the customer..."/>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Choose a bike:</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="bikeSerial">Serial: </label>
+                    <select id="bikeSerial" th:field="*{bikeSerial}" class="form-control">
+                        <option th:each="availableBikeSerial : ${availableBikeSerials}"
+                                th:value="${availableBikeSerial}"
+                                th:text="${availableBikeSerial}"></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="salesmanCodeNameSurname">Salesman ID: </label>
+                    <select id="salesmanCodeNameSurname" th:field="*{salesmanCodeNameSurname}" class="form-control">
+                        <option th:each="availableSalesmanCodeNameSurname : ${availableSalesmanCodeNameSurnames}"
+                                th:value="${availableSalesmanCodeNameSurname}"
+                                th:text="${availableSalesmanCodeNameSurname}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="row-mt-3">
+            <div class="col-md-6">
+                <input type="submit" value="Order" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="container-fluid">
+    <div class="container">
+        <input type="text" id="searchInput1" class="form-control mb-3" placeholder="Search customer...">
+        <form action="#" th:action="@{/purchase}" method="POST" th:object="${CustomerDTO}">
+            <table class="table" id="customer-table1">
+                <thead class="table-dark">
+                <tr>
+                    <th class="col-0">Number:</th>
+                    <th class="col-0">Name:</th>
+                    <th class="col-0">Surname:</th>
+                    <th class="col-2">Email:</th>
+                    <th class="col-3">Phone number:</th>
+                    <th class="col-2">Country:</th>
+                    <th class="col-2">City:</th>
+                    <th class="col-2">Postal code:</th>
+                    <th class="col-2">Street:</th>
+                    <th class="col-2">House number:</th>
+                    <th class="col-2">Apartment number:</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="customer,stat : ${availableCustomerDTOs}">
+                    <td th:text="${stat.count}"></td>
+                    <td th:text="${customer.name}"></td>
+                    <td th:text="${customer.surname}"></td>
+                    <td th:text="${customer.email}"></td>
+                    <td th:text="${customer.phone}"></td>
+                    <td th:text="${customer.country}"></td>
+                    <td th:text="${customer.city}"></td>
+                    <td th:text="${customer.postalCode}"></td>
+                    <td th:text="${customer.address}"></td>
+                    <td th:text="${customer.houseNumber}"></td>
+                    <td th:text="${customer.apartmentNumber}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="pagination-container1"></div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var items = $("#bikes-table tr");
+        var numItems = items.length;
+        var perPage = 10;
+
+        items.slice(perPage).hide();
+
+        $('#pagination-container').twbsPagination({
+            totalPages: Math.ceil(numItems / perPage),
+            visiblePages: 5,
+            onPageClick: function (event, page) {
+                var start = perPage * (page - 1);
+                var end = start + perPage;
+
+                items.hide().slice(start, end).show();
+            }
+        });
+    });
+    $(document).ready(function () {
+        var items = $("#customer-table1 tr");
+        var numItems = items.length;
+        var perPage = 10;
+
+        items.slice(perPage).hide();
+
+        $('#pagination-container1').twbsPagination({
+            totalPages: Math.ceil(numItems / perPage),
+            visiblePages: 5,
+            onPageClick: function (event, page) {
+                var start = perPage * (page - 1);
+                var end = start + perPage;
+
+                items.hide().slice(start, end).show();
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#bikes-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    $(document).ready(function () {
+        $("#searchInput1").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#customer-table1 tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+</body>
+<br><br><br>
+<div th:replace='~{/fragments/footer.html :: template}'></div>
+</html>
