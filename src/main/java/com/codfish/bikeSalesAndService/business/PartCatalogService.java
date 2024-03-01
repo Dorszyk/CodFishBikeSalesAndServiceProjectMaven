@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,7 +46,7 @@ public class PartCatalogService {
 
     public List<Part> findAll() {
         List<Part> parts = partDAO.findAll();
-        log.info("Available parts: [{}]", parts);
+        log.info("Available parts: [{}]", parts.size());
         return parts;
     }
 }

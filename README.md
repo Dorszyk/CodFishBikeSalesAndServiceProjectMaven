@@ -36,7 +36,7 @@ http://localhost:9181/codfish-bike/ dla user_1 lub user_2
 # w zależności, jaką osobą się zalogujesz, masz swoje uprawnienia w wyświetlaniu danych na stronie.
 Jeżeli chcesz przeglądać program jako administrator bez użycia security (logowania, dostęp do wszystkich uprawnień), to w pliku application-local.properties
 masz wyłączony spring.security.enabled=false, oraz możesz uruchomić go lokalnie na innym localhost.
-Szczegóły w pliku "active=local" znajdziesz jego lokalizację w commit "Uruchomianie programu CodFish Bikes Sales&Service"
+Szczegóły w pliku "active=local.png" znajdziesz jego lokalizację w commit "Starting the CodFishBikes Sales&Service software"
 
 # wybierz przeglądarkę i wpisz adres:
 http://localhost:9080/codfish-bike/ dla administratora
