@@ -27,10 +27,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource(locations = "classpath:application-test.properties")
-@WebMvcTest(controllers = PurchaseNewCustomerController.class)
+@WebMvcTest(controllers = PurchaseController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class PurchaseNewCustomerControllerTest {
+public class
+
+
+PurchaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,12 +59,12 @@ public class PurchaseNewCustomerControllerTest {
         Mockito.when(bikePurchaseService.purchase(Mockito.any())).thenReturn(expectedInvoice);
 
         // when, then
-        mockMvc.perform(post(PurchaseNewCustomerController.PURCHASE_NEW_CUSTOMER).params(parameters))
-            .andExpect(status().isOk())
-            .andExpect(model().attributeExists("invoiceNumber"))
-            .andExpect(model().attributeExists("customerName"))
-            .andExpect(model().attributeExists("customerSurname"))
-            .andExpect(view().name("info/bike_purchase_new_customer_done"));
+        mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("invoiceNumber"))
+                .andExpect(model().attributeExists("customerName"))
+                .andExpect(model().attributeExists("customerSurname"))
+                .andExpect(view().name("info/bike_purchase_new_customer_done"));
     }
 
     @Test
@@ -74,11 +77,11 @@ public class PurchaseNewCustomerControllerTest {
         parametersMap.forEach(parameters::add);
 
         // when, then
-        mockMvc.perform(post(PurchaseNewCustomerController.PURCHASE_NEW_CUSTOMER).params(parameters))
-            .andExpect(status().isBadRequest())
-            .andExpect(model().attributeExists("errorMessage"))
-            .andExpect(model().attribute("errorMessage", Matchers.containsString(badEmail)))
-            .andExpect(view().name("error"));
+        mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+                .andExpect(status().isBadRequest())
+                .andExpect(model().attributeExists("errorMessage"))
+                .andExpect(model().attribute("errorMessage", Matchers.containsString(badEmail)))
+                .andExpect(view().name("error"));
     }
 
     @ParameterizedTest
@@ -95,43 +98,43 @@ public class PurchaseNewCustomerControllerTest {
             Invoice expectedInvoice = Invoice.builder().invoiceNumber("test").build();
             Mockito.when(bikePurchaseService.purchase(Mockito.any())).thenReturn(expectedInvoice);
 
-            mockMvc.perform(post(PurchaseNewCustomerController.PURCHASE_NEW_CUSTOMER).params(parameters))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("invoiceNumber"))
-                .andExpect(model().attributeExists("customerName"))
-                .andExpect(model().attributeExists("customerSurname"))
-                .andExpect(view().name("info/bike_purchase_new_customer_done"));
+            mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeExists("invoiceNumber"))
+                    .andExpect(model().attributeExists("customerName"))
+                    .andExpect(model().attributeExists("customerSurname"))
+                    .andExpect(view().name("info/bike_purchase_new_customer_done"));
         } else {
-            mockMvc.perform(post(PurchaseNewCustomerController.PURCHASE_NEW_CUSTOMER).params(parameters))
-                .andExpect(status().isBadRequest())
-                .andExpect(model().attributeExists("errorMessage"))
-                .andExpect(model().attribute("errorMessage", Matchers.containsString(phone)))
-                .andExpect(view().name("error"));
+            mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(model().attributeExists("errorMessage"))
+                    .andExpect(model().attribute("errorMessage", Matchers.containsString(phone)))
+                    .andExpect(view().name("error"));
         }
     }
 
     public static Stream<Arguments> thatPhoneValidationWorksCorrectly() {
         return Stream.of(
-            Arguments.of(false, ""),
-            Arguments.of(false, "+48 504 203 260@@"),
-            Arguments.of(false, "+48.504.203.260"),
-            Arguments.of(false, "+55(123) 456-78-90-"),
-            Arguments.of(false, "+55(123) - 456-78-90"),
-            Arguments.of(false, "504.203.260"),
-            Arguments.of(false, " "),
-            Arguments.of(false, "-"),
-            Arguments.of(false, "()"),
-            Arguments.of(false, "() + ()"),
-            Arguments.of(false, "(21 7777"),
-            Arguments.of(false, "+48 (21)"),
-            Arguments.of(false, "+"),
-            Arguments.of(false, " 1"),
-            Arguments.of(false, "1"),
-            Arguments.of(false, "+48 (12) 504 203 260"),
-            Arguments.of(false, "+48 (12) 504-203-260"),
-            Arguments.of(false, "+48(12)504203260"),
-            Arguments.of(false, "555-5555-555"),
-            Arguments.of(true, "+48 504 203 260")
+                Arguments.of(false, ""),
+                Arguments.of(false, "+48 504 203 260@@"),
+                Arguments.of(false, "+48.504.203.260"),
+                Arguments.of(false, "+55(123) 456-78-90-"),
+                Arguments.of(false, "+55(123) - 456-78-90"),
+                Arguments.of(false, "504.203.260"),
+                Arguments.of(false, " "),
+                Arguments.of(false, "-"),
+                Arguments.of(false, "()"),
+                Arguments.of(false, "() + ()"),
+                Arguments.of(false, "(21 7777"),
+                Arguments.of(false, "+48 (21)"),
+                Arguments.of(false, "+"),
+                Arguments.of(false, " 1"),
+                Arguments.of(false, "1"),
+                Arguments.of(false, "+48 (12) 504 203 260"),
+                Arguments.of(false, "+48 (12) 504-203-260"),
+                Arguments.of(false, "+48(12)504203260"),
+                Arguments.of(false, "555-5555-555"),
+                Arguments.of(true, "+48 504 203 260")
         );
     }
 }
