@@ -131,6 +131,7 @@
                     </annotationProcessorPaths>
                     <showWarnings>true</showWarnings>
                     <failOnError>true</failOnError>
+                    <showDeprecation>false</showDeprecation>
                     <compilerArgs>
                         <arg>-Xlint:none</arg>
                     </compilerArgs>

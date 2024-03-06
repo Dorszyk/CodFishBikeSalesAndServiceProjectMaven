@@ -3,8 +3,11 @@ package com.codfish.bikeSalesAndService.api.controller;
 import com.codfish.bikeSalesAndService.api.dto.BikePurchaseDTO;
 import com.codfish.bikeSalesAndService.api.dto.mapper.BikeMapper;
 import com.codfish.bikeSalesAndService.api.dto.mapper.BikePurchaseMapper;
+import com.codfish.bikeSalesAndService.api.dto.mapper.CustomerMapper;
 import com.codfish.bikeSalesAndService.business.BikePurchaseService;
+import com.codfish.bikeSalesAndService.business.CustomerService;
 import com.codfish.bikeSalesAndService.domain.Invoice;
+import com.codfish.bikeSalesAndService.infrastructure.database.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -30,13 +33,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = PurchaseController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class
-
-
-PurchaseControllerTest {
+public class PurchaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private CustomerMapper customerMapper;
 
     @MockBean
     private BikePurchaseService bikePurchaseService;
@@ -49,6 +52,14 @@ PurchaseControllerTest {
     @SuppressWarnings("unused")
     private BikeMapper bikeMapper;
 
+    @MockBean
+    @SuppressWarnings("unused")
+    private CustomerRepository customerRepository;
+
+    @MockBean
+    @SuppressWarnings("unused")
+    private CustomerService customerService;
+
     @Test
     void bikePurchaseWorksCorrectly() throws Exception {
         // given
@@ -59,12 +70,12 @@ PurchaseControllerTest {
         Mockito.when(bikePurchaseService.purchase(Mockito.any())).thenReturn(expectedInvoice);
 
         // when, then
-        mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+        mockMvc.perform(post(PurchaseController.PURCHASE).params(parameters))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("invoiceNumber"))
                 .andExpect(model().attributeExists("customerName"))
                 .andExpect(model().attributeExists("customerSurname"))
-                .andExpect(view().name("info/bike_purchase_new_customer_done"));
+                .andExpect(view().name("info/bike_purchase_done"));
     }
 
     @Test
@@ -77,7 +88,7 @@ PurchaseControllerTest {
         parametersMap.forEach(parameters::add);
 
         // when, then
-        mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+        mockMvc.perform(post(PurchaseController.PURCHASE).params(parameters))
                 .andExpect(status().isBadRequest())
                 .andExpect(model().attributeExists("errorMessage"))
                 .andExpect(model().attribute("errorMessage", Matchers.containsString(badEmail)))
@@ -98,14 +109,14 @@ PurchaseControllerTest {
             Invoice expectedInvoice = Invoice.builder().invoiceNumber("test").build();
             Mockito.when(bikePurchaseService.purchase(Mockito.any())).thenReturn(expectedInvoice);
 
-            mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+            mockMvc.perform(post(PurchaseController.PURCHASE).params(parameters))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists("invoiceNumber"))
                     .andExpect(model().attributeExists("customerName"))
                     .andExpect(model().attributeExists("customerSurname"))
-                    .andExpect(view().name("info/bike_purchase_new_customer_done"));
+                    .andExpect(view().name("info/bike_purchase_done"));
         } else {
-            mockMvc.perform(post(PurchaseController.PURCHASE_NEW_CUSTOMER).params(parameters))
+            mockMvc.perform(post(PurchaseController.PURCHASE).params(parameters))
                     .andExpect(status().isBadRequest())
                     .andExpect(model().attributeExists("errorMessage"))
                     .andExpect(model().attribute("errorMessage", Matchers.containsString(phone)))
