@@ -13,6 +13,7 @@
         <spring.boot.version>3.2.3</spring.boot.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <testcontainers.version>1.19.6</testcontainers.version>
+        <plantuml-generator-util.version>2.0.0</plantuml-generator-util.version>
     </properties>
 
     <dependencyManagement>
@@ -105,6 +106,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.elnarion.util</groupId>
+            <artifactId>plantuml-generator-util</artifactId>
+            <version>${plantuml-generator-util.version}</version>
         </dependency>
     </dependencies>
 
