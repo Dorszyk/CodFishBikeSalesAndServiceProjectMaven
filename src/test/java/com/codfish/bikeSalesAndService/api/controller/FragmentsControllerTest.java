@@ -46,9 +46,10 @@ class FragmentsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("info/add_update_person_repairing"));
     }
+
     @Test
     void getFragmentsInvoicesTest() throws Exception {
-        mockMvc.perform(get("/info/invoice-purchases"))
+        mockMvc.perform(get("/info/invoice_purchases"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("info/invoice_purchases"));
     }
